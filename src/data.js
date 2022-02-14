@@ -67,10 +67,10 @@ export const popularProducts = [
   },
   {
     id: 7,
-    img: "https://assets.stickpng.com/images/580b57fbd9996e24bc43bf2c.png",
+    img: "https://i.ibb.co/d0jM9XT/580b57fbd9996e24bc43bf2c.png",
   },
   {
     id: 8,
-    img: "https://assets.stickpng.com/images/580b57fbd9996e24bc43bf33.png",
+    img: "https://i.ibb.co/pd4v5c1/31-A0866-A219-A-FOT-ECO-1.png",
   },
 ];
