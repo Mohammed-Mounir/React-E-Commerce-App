@@ -123,6 +123,9 @@ const Product = () => {
   const params = useParams();
   const id = params.id;
   const [product, setProduct] = useState({});
+  const [quantity, setQuantity] = useState(1);
+  const [color, setColor] = useState("");
+  const [size, setSize] = useState("");
 
   useEffect(() => {
     const getProduct = async () => {
@@ -136,6 +139,23 @@ const Product = () => {
     };
     getProduct();
   }, [id]);
+
+  const quantityHandler = (type) => {
+    if (type === "decrease" && quantity > 1) {
+      setQuantity((prevQuantity) => prevQuantity - 1);
+    }
+    if (type === "increase" && quantity < 5) {
+      setQuantity((prevQuantity) => prevQuantity + 1);
+    }
+  };
+
+  const changeColorHandler = (color) => {
+    setColor(color);
+  };
+
+  const changeSizeHandler = (size) => {
+    setSize(size);
+  };
 
   return (
     <Container>
@@ -153,13 +173,19 @@ const Product = () => {
             <Filter>
               <FilterTitle>Color</FilterTitle>
               {product.color?.map((color) => (
-                <FilterColor key={color} color={color} />
+                <FilterColor
+                  key={color}
+                  color={color}
+                  onClick={() => changeColorHandler(color)}
+                />
               ))}
             </Filter>
 
             <Filter>
               <FilterTitle>Size</FilterTitle>
-              <FilterSize>
+              <FilterSize
+                onChange={(evt) => changeSizeHandler(evt.target.value)}
+              >
                 {product.size?.map((size) => (
                   <FilterSizeOption key={size}>{size}</FilterSizeOption>
                 ))}
@@ -168,9 +194,9 @@ const Product = () => {
           </FilterContainer>
           <AddContainer>
             <AmountContainer>
-              <RemoveIcon />
-              <Amount>1</Amount>
-              <AddIcon />
+              <RemoveIcon onClick={() => quantityHandler("decrease")} />
+              <Amount>{quantity}</Amount>
+              <AddIcon onClick={() => quantityHandler("increase")} />
             </AmountContainer>
             <Button>ADD TO CART</Button>
           </AddContainer>
