@@ -1,3 +1,6 @@
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { publicRequest } from "../requestMethods";
 import styled from "styled-components";
 import Announcement from "../components/Announcement";
 import Navbar from "../components/Navbar";
@@ -117,41 +120,49 @@ const Button = styled.button`
 `;
 
 const Product = () => {
+  const params = useParams();
+  const id = params.id;
+  const [product, setProduct] = useState({});
+
+  useEffect(() => {
+    const getProduct = async () => {
+      try {
+        const res = await publicRequest.get("/products/find/" + id);
+        const product = res.data;
+        setProduct(product);
+      } catch (err) {
+        console.error("Could not fetch product: " + err);
+      }
+    };
+    getProduct();
+  }, [id]);
+
   return (
     <Container>
       <Announcement />
       <Navbar />
       <Wrapper>
         <ImgContainer>
-          <Image src="https://i.ibb.co/mDh9gBg/todi-slim-jeans.png" />
+          <Image src={product.img} />
         </ImgContainer>
         <InfoContainer>
-          <Title>Slim Jeans</Title>
-          <Desc>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. At
-            excepturi saepe praesentium! Suscipit impedit, quam quod officia
-            doloribus nihil a fugit sed, accusamus dolores dolorem nostrum
-            voluptas, voluptatum aliquam. Dolor? Velit magni atque deserunt
-            rerum commodi minus tenetur culpa deleniti fuga impedit cupiditate
-            perspiciatis corporis, Fugit!
-          </Desc>
-          <Price>$ 20</Price>
+          <Title>{product.title}</Title>
+          <Desc>{product.desc}</Desc>
+          <Price>$ {product.price}</Price>
           <FilterContainer>
             <Filter>
               <FilterTitle>Color</FilterTitle>
-              <FilterColor color="black" />
-              <FilterColor color="darkblue" />
-              <FilterColor color="gray" />
+              {product.color?.map((color) => (
+                <FilterColor key={color} color={color} />
+              ))}
             </Filter>
 
             <Filter>
               <FilterTitle>Size</FilterTitle>
               <FilterSize>
-                <FilterSizeOption>XS</FilterSizeOption>
-                <FilterSizeOption>S</FilterSizeOption>
-                <FilterSizeOption>M</FilterSizeOption>
-                <FilterSizeOption>L</FilterSizeOption>
-                <FilterSizeOption>XL</FilterSizeOption>
+                {product.size?.map((size) => (
+                  <FilterSizeOption key={size}>{size}</FilterSizeOption>
+                ))}
               </FilterSize>
             </Filter>
           </FilterContainer>
