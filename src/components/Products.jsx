@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import Product from "./Product";
-import { popularProducts } from "../data";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -28,19 +27,40 @@ const Products = ({ cat, filters, sort }) => {
   }, [cat]);
 
   useEffect(() => {
+    if (!cat) return;
+
     const filtered = products.filter((product) =>
       Object.entries(filters).every(([key, value]) =>
         product[key].includes(value)
       )
     );
+
     cat && setFilteredProducts(filtered);
   }, [products, filters, cat]);
 
+  useEffect(() => {
+    if (sort === "newest") {
+      setFilteredProducts((prev) =>
+        [...prev].sort((a, b) => a.createdAt - b.createdAt)
+      );
+    } else if (sort === "asc") {
+      setFilteredProducts((prev) =>
+        [...prev].sort((a, b) => a.price - b.price)
+      );
+    } else {
+      setFilteredProducts((prev) =>
+        [...prev].sort((a, b) => b.price - a.price)
+      );
+    }
+  }, [sort]);
+
   return (
     <Container>
-      {filteredProducts.map((item) => (
-        <Product key={item.id} item={item} />
-      ))}
+      {cat
+        ? filteredProducts.map((item) => <Product key={item._id} item={item} />)
+        : products
+            .slice(0, 8)
+            .map((item) => <Product key={item._id} item={item} />)}
     </Container>
   );
 };
