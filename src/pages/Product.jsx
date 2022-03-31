@@ -162,7 +162,6 @@ const Product = () => {
 
   const addToCartHandler = () => {
     dispatch(addProduct({ ...product, quantity, color, size }));
-    // addProduct({ product, quantity, totalPrice: product.price * quantity })
   };
 
   return (
