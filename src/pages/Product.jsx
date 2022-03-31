@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addProduct } from "../redux/cartRedux";
 import { publicRequest } from "../requestMethods";
 import styled from "styled-components";
 import Announcement from "../components/Announcement";
@@ -120,6 +122,7 @@ const Button = styled.button`
 `;
 
 const Product = () => {
+  const dispatch = useDispatch();
   const params = useParams();
   const id = params.id;
   const [product, setProduct] = useState({});
@@ -155,6 +158,11 @@ const Product = () => {
 
   const changeSizeHandler = (size) => {
     setSize(size);
+  };
+
+  const addToCartHandler = () => {
+    dispatch(addProduct({ ...product, quantity, color, size }));
+    // addProduct({ product, quantity, totalPrice: product.price * quantity })
   };
 
   return (
@@ -198,7 +206,7 @@ const Product = () => {
               <Amount>{quantity}</Amount>
               <AddIcon onClick={() => quantityHandler("increase")} />
             </AmountContainer>
-            <Button>ADD TO CART</Button>
+            <Button onClick={addToCartHandler}>ADD TO CART</Button>
           </AddContainer>
         </InfoContainer>
       </Wrapper>
