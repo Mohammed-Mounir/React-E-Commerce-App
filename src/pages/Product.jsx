@@ -136,6 +136,8 @@ const Product = () => {
         const res = await publicRequest.get("/products/find/" + id);
         const product = res.data;
         setProduct(product);
+        setColor(product.color[0]);
+        setSize(product.size[0]);
       } catch (err) {
         console.error("Could not fetch product: " + err);
       }

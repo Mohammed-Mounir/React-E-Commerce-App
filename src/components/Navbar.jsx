@@ -4,6 +4,7 @@ import { Search } from "@mui/icons-material";
 import Badge from "@mui/material/Badge";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import { mobile } from "../responsive";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   height: 60px;
@@ -52,6 +53,7 @@ const Center = styled.div`
 
 const Logo = styled.h1`
   font-weight: bold;
+  color: #000;
   ${mobile({ fontSize: "24px" })}
 `;
 
@@ -84,16 +86,20 @@ const Navbar = () => {
           </SearchContainer>
         </Left>
         <Center>
-          <Logo>FASHION.</Logo>
+          <Link to="/" style={{ textDecoration: "none" }}>
+            <Logo>FASHION.</Logo>
+          </Link>
         </Center>
         <Right>
           <MenuItem>REGISTER</MenuItem>
           <MenuItem>SIGN IN</MenuItem>
-          <MenuItem>
-            <Badge badgeContent={quantity} color="primary">
-              <ShoppingCartOutlinedIcon />
-            </Badge>
-          </MenuItem>
+          <Link to="/cart">
+            <MenuItem>
+              <Badge badgeContent={quantity} color="primary">
+                <ShoppingCartOutlinedIcon />
+              </Badge>
+            </MenuItem>
+          </Link>
         </Right>
       </Wrapper>
     </Container>
