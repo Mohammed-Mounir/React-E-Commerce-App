@@ -5,6 +5,7 @@ import Product from "./pages/Product";
 import Cart from "./pages/Cart";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Success from "./pages/Success";
 
 const App = () => {
   const user = true;
@@ -15,6 +16,7 @@ const App = () => {
       <Route path="/products/:category" element={<ProductList />} />
       <Route path="/Product/:id" element={<Product />} />
       <Route path="/cart" element={<Cart />} />
+      <Route path="/success" element={<Success />} />
       <Route
         path="/login"
         element={user ? <Navigate to="/" replace /> : <Login />}
