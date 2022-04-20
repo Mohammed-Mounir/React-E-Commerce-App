@@ -6,6 +6,7 @@ import {
   PhoneAndroid,
   Publish,
 } from "@mui/icons-material";
+import { Link } from "react-router-dom";
 import "./User.css";
 
 const User = () => {
@@ -13,7 +14,9 @@ const User = () => {
     <div className="user">
       <div className="userTitleContainer">
         <h1 className="userTitle">Edit User</h1>
-        <button className="userAddButton">Create</button>
+        <Link to="/new-user">
+          <button className="userAddButton">Create</button>
+        </Link>
       </div>
       <div className="userContainter">
         <div className="userShow">
