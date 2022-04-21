@@ -22,7 +22,7 @@ const Sidebar = () => {
         <div className="sidebarMenu">
           <h3 className="sidebarTitle">Dashboard</h3>
           <ul className="sidebarList">
-            <Link to="/">
+            <Link to="/" className="link">
               <li className="sidebarListItem">
                 <LineStyle className="sidebarIcon" />
                 Home
