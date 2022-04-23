@@ -23,11 +23,15 @@ const AppLayout = ({ admin }) =>
   ) : null;
 
 function App() {
+  const admin = JSON.parse(
+    JSON.parse(localStorage.getItem("persist:root"))?.user
+  ).currentUser.isAdmin;
+
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route element={<AppLayout admin={true} />}>
+        <Route element={<AppLayout admin={admin} />}>
           <Route path="/" element={<Home />} />
           <Route path="/users" element={<UserList />} />
           <Route path="/user/:userId" element={<User />} />
