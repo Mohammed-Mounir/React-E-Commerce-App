@@ -1,14 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DataGrid } from "@mui/x-data-grid";
 import { DeleteOutline } from "@mui/icons-material";
-import { productRows } from "../../dummyData";
 import { Link } from "react-router-dom";
 import "./ProductList.css";
-import { getProducts } from "../../redux/apiCalls";
+import { getProducts, deleteProduct } from "../../redux/apiCalls";
 
 const ProductList = () => {
-  const [data, setData] = useState(productRows);
   const dispatch = useDispatch();
   const products = useSelector((state) => state.product.products);
 
@@ -17,8 +15,7 @@ const ProductList = () => {
   }, [dispatch]);
 
   const deleteUserHandler = (id) => {
-    const updatedProducts = data.filter((product) => product.id !== id);
-    setData(updatedProducts);
+    deleteProduct(id, dispatch);
   };
 
   const columns = [
@@ -57,11 +54,11 @@ const ProductList = () => {
       renderCell: (params) => {
         return (
           <>
-            <Link to={`/product/${params.row.id}`}>
+            <Link to={`/product/${params.row._id}`}>
               <button className="productListEdit">Edit</button>
             </Link>
             <DeleteOutline
-              onClick={() => deleteUserHandler(params.row.id)}
+              onClick={() => deleteUserHandler(params.row._id)}
               className="productListDelete"
             />
           </>
