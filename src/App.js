@@ -1,6 +1,5 @@
-import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
-import Topbar from "./components/Topbar/Topbar";
-import Sidebar from "./components/Sidebar/Sidebar";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import Home from "./pages/Home/Home";
 import UserList from "./pages/UserList/UserList";
 import User from "./pages/User/User";
@@ -9,29 +8,15 @@ import ProductList from "./pages/ProductList/ProductList";
 import Product from "./pages/Product/Product";
 import NewProduct from "./pages/NewProduct/NewProduct";
 import Login from "./pages/Login/Login";
+import ProtectedRoutes from "./ProtectedRoutes";
 import "./App.css";
 
-const AppLayout = ({ admin }) =>
-  admin ? (
-    <>
-      <Topbar />
-      <div className="container">
-        <Sidebar />
-        <Outlet />
-      </div>
-    </>
-  ) : null;
-
 function App() {
-  const admin = JSON.parse(
-    JSON.parse(localStorage.getItem("persist:root"))?.user
-  ).currentUser?.isAdmin;
-
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route element={<AppLayout admin={admin} />}>
+        <Route element={<ProtectedRoutes />}>
           <Route path="/" element={<Home />} />
           <Route path="/users" element={<UserList />} />
           <Route path="/user/:userId" element={<User />} />
