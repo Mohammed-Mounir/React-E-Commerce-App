@@ -1,16 +1,14 @@
-import { Navigate, Outlet } from "react-router";
+import { useSelector } from "react-redux";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import Topbar from "./components/Topbar/Topbar";
 import Sidebar from "./components/Sidebar/Sidebar";
 
-const useAuth = () => {
-  return localStorage.getItem("persist:root")
-    ? JSON.parse(JSON.parse(localStorage.getItem("persist:root"))?.user)
-        .currentUser?.isAdmin
-    : false;
-};
-
 const ProtectedRoutes = () => {
-  const isAuth = useAuth();
+  const user = useSelector((state) => state.user);
+  const location = useLocation();
+
+  const isAuth = user.currentUser ? user.currentUser?.isAdmin : false;
+
   return isAuth ? (
     <>
       <Topbar />
@@ -20,7 +18,7 @@ const ProtectedRoutes = () => {
       </div>
     </>
   ) : (
-    <Navigate to="/login" />
+    <Navigate to="/login" replace state={{ from: location }} />
   );
 };
 
