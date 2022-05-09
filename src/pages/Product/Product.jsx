@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 
 import { Publish } from "@mui/icons-material";
@@ -8,11 +8,22 @@ import Chart from "../../components/Chart/Chart";
 
 import "./Product.css";
 import { userRequest } from "../../requestMethods";
+import { updateProduct } from "../../redux/apiCalls";
+
+const defaultFormFields = {
+  title: "",
+  desc: "",
+  price: "",
+  img: "",
+};
 
 const Product = () => {
   const location = useLocation();
   const productId = location.pathname.split("/")[2];
   const [pStats, setPStats] = useState([]);
+  const [formFields, setFormFields] = useState(defaultFormFields);
+  const { title, desc, price, img } = formFields;
+  const dispatch = useDispatch();
 
   const product = useSelector((state) =>
     state.product.products.find((product) => product._id === productId)
@@ -54,6 +65,32 @@ const Product = () => {
     getStats();
   }, [productId, MONTHS]);
 
+  useEffect(() => {
+    setFormFields({
+      title: product.title,
+      desc: product.desc,
+      price: product.price,
+      img: product.img,
+    });
+  }, [product]);
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+
+    setFormFields((prevFormFields) => ({
+      ...prevFormFields,
+      [name]: value,
+    }));
+  };
+
+  const submitHandler = (event) => {
+    event.preventDefault();
+
+    if (!title.trim().length || !desc.trim().length || +price <= 0) return;
+
+    updateProduct(productId, formFields, dispatch);
+  };
+
   return (
     <div className="product">
       <div className="productTitleContainer">
@@ -82,35 +119,52 @@ const Product = () => {
             </div>
             <div className="productInfoItem">
               <span className="productInfoKey">in stock:</span>
-              <span className="productInfoValue">{product.isStock}</span>
+              <span className="productInfoValue">{product.inStock}</span>
             </div>
           </div>
         </div>
       </div>
       <div className="productBottom">
-        <form className="productForm">
+        <form onSubmit={submitHandler} className="productForm">
           <div className="productFormLeft">
             <label>Product Name</label>
-            <input type="text" placeholder={product.title} />
+            <input
+              type="text"
+              name="title"
+              value={title}
+              onChange={handleChange}
+            />
             <label>Product Description</label>
-            <input type="text" placeholder={product.desc} />
+            <input
+              type="text"
+              name="desc"
+              value={desc}
+              onChange={handleChange}
+            />
             <label>Price</label>
-            <input type="text" placeholder={product.price} />
+            <input
+              type="number"
+              name="price"
+              value={price}
+              onChange={handleChange}
+            />
             <label>In Stock</label>
-            <select name="inStock" id="inStock">
+            <select name="inStock" id="inStock" onChange={handleChange}>
               <option value="true">Yes</option>
               <option value="false">No</option>
             </select>
           </div>
           <div className="productFormRight">
             <div className="productUpload">
-              <img src={product.img} alt="" className="productUploadImg" />
+              <img src={img} alt="" className="productUploadImg" />
               <label htmlFor="file">
                 <Publish />
               </label>
               <input type="file" id="file" style={{ display: "none" }} />
             </div>
-            <button className="productButton">Update</button>
+            <button type="submit" className="productButton">
+              Update
+            </button>
           </div>
         </form>
       </div>
